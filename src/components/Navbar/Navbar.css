@@ -7,6 +7,9 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 #logo{
   display: flex;
@@ -24,6 +27,16 @@
   font-family: "Varela Round", sans-serif;
   font-weight: 500;
   font-style: normal;
+}
+#toggle-and-switches{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#switches{
+  display: flex;
+  flex-direction: column;
+  margin-right: 25px;
 }
 
 

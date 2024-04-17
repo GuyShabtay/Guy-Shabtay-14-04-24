@@ -1,24 +1,22 @@
 import React,{useState} from 'react';
 import './WeatherView.css';
 import HeartBtn from '../HeartBtn/HeartBtn';
+import DayCard from '../DayCard/DayCard';
 import {getCity,getCurrentConditions,getNextFiveDaysConditions} from '../../ApiCalls';
-
-
-
 
 const WeatherView = () => {
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
-  const [currentWeatherText, setCurrentWeatherText] = useState('');
-  const [currentWeatherTemperature, setCurrentWeatherTemperature] = useState({});
-  const [city, setCity] = useState('London');
+  const [currentWeatherConditions, setCurrentWeatherConditions] = useState({});
+  const [city, setCity] = useState('london');
   const [nextFiveDaysConditions, setNextFiveDaysConditions] = useState([]);
+  const [temperatureScale, setTemperatureScale] = useState('°C');
 
   
   const handleAddToFavorites =async () => {
       try {
         const cityCode = await getCity(city); // Replace 'YourCityName' with the city you want to search for
         console.log(cityCode); // Print the result
-        handleAddToFavorites1(cityCode)
+        handleAddToFavorites1(215854)
       } catch (error) {
         console.error('Error:', error);
       }
@@ -27,9 +25,8 @@ const WeatherView = () => {
   }
   const handleAddToFavorites1 =async (cityCode) => {
     try {
-      const CurrentConditions = await getCurrentConditions(cityCode); // Replace 'YourCityName' with the city you want to search for
-        setCurrentWeatherText(CurrentConditions.WeatherText);      
-        setCurrentWeatherText(CurrentConditions.WeatherText.Temperature.Metric.Value);      
+      const currentWeatherDetails = await getCurrentConditions(cityCode); // Replace 'YourCityName' with the city you want to search for
+      setCurrentWeatherConditions(currentWeatherDetails);      
         handleAddToFavorites2(cityCode)
     } catch (error) {
       console.error('Error:', error);
@@ -49,10 +46,10 @@ const WeatherView = () => {
     <div id='weather-view'>
       <div id='weather-view-top'>
         <div id='weather-view-top-left'>
-          <div id='square'></div>
-          <div id='location-details'>
+        <img id='current-weather-icon' src={`/weather icons/${currentWeatherConditions.weatherIcon}.png`} alt="current weather icon" />
+        <div id='location-details'>
             <div id='city'>{city}</div>
-            <div id='degrees'>38 c</div>
+            <div id='current-temperature'>{currentWeatherConditions.temperatureC}{temperatureScale}</div>
           </div>
         </div>
         <h1 className='handlee-regular'>Discover your forecast, seize the day</h1>
@@ -67,14 +64,15 @@ const WeatherView = () => {
         </div>
       </div>
       <div id='current-weather'>
-      <h1>{currentWeatherText}</h1>
+      <h1>{currentWeatherConditions.weatherText}</h1>
       </div>
       <div id='weather-view-bottom'>
   {nextFiveDaysConditions.map((day, index) => (
     <div className='day' key={index}>
-      <div id='day-name'>{days[index]}</div>
-      <div id='degrees'>{day.minTemperatureC} - {day.maxTemperatureC} °C</div>
-      <img src={`/weather icons/${day.dayIcon}.png`} alt="weather icon" />
+    {/*<div id='day-name'>{days[index]}</div>
+      <div id='degrees'>{day.minTemperatureC} - {day.maxTemperatureC} {temperatureScale}</div>
+  <img src={`/weather icons/${day.dayIcon}.png`} alt="weather icon" />*/}
+  <DayCard dayName={days[index]} day={day}  />
     </div>
   ))}
 </div>

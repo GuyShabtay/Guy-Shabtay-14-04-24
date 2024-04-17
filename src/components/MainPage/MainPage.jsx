@@ -1,6 +1,6 @@
 import React from 'react';
 import './MainPage.css';
-import SearchBar from '../../components/SearchBar';
+import SearchBar from '../../components/SearchBar'
 import WeatherView from '../../components/WeatherView/WeatherView';
 
 

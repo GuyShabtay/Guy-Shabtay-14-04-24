@@ -55,10 +55,10 @@
 
 }
 #weather-view-bottom .day{
-  /* border: solid 2px rgb(96, 229, 114); */
-  background-color: white;
+ 
+  /* background-color: white;
   border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.8); */
   width: 15%;
   height: 100%;
 }
