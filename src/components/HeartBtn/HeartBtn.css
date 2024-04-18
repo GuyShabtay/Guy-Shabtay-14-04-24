@@ -12,18 +12,29 @@
   }
 }
 
-.heart {
+.empty-heart {
   color: black;
   opacity: 0.3;
   width: 70px;
   height: 70px;
-  
 }
-
-.heart:hover {
+.empty-heart#added {
   animation: heartbeat 1s;
   fill: red;
   color: red;
   opacity: 1;
   transition: opacity 500ms;
 }
+.full-heart {
+  color: red;
+  color: red;
+  width: 70px;
+  height: 70px;
+}
+.full-heart#removed {
+  animation: heartbeat 1s;
+  color: black;
+  opacity: 0.3;
+  transition: opacity 500ms;
+}
+

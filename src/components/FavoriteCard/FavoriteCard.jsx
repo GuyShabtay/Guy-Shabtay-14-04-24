@@ -5,10 +5,21 @@ import { useSelector } from 'react-redux';
 
 const FavoriteCard = ({favorite}) => {
   const isDarkMode = useSelector((state) => state.theme.isDarkMode);
+  const isFahrenheit = useSelector(
+    (state) => state.temperatureScale.isFahrenheit
+  );
   return (
-    <div id='favorite-card' className={isDarkMode==true ? 'dark-mode' :''}>
+    <div id='favorite-card' className={isDarkMode ? 'dark-mode' :''}>
     <div id='favorite-city'>{favorite.city}</div>
-      <div id='degrees'>{favorite.temperatureC}°C</div>
+    {isFahrenheit ? (
+      <div id='degrees'>
+      {favorite.temperatureF} °F
+      </div>
+    ) : (
+      <div id='degrees'>
+      {favorite.temperatureC} °C
+      </div>
+    )}
       <img id='favorite-weather-icon' src={`/weather icons/${favorite.dayIcon}.png`} alt="favorite weather icon" />
       {console.log(isDarkMode)}
     </div>

@@ -10,7 +10,7 @@ export const getCity = async (cityName) => {
     const response = await axios.get(base + query);
     console.log(response.data[0].Key)
 
-    return response;
+    return response.data[0].Key;
   } catch (error) {
     console.error('Error fetching city:', error);
     throw error; // Rethrow the error to be caught by the caller
