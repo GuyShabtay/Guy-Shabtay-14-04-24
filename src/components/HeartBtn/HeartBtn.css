@@ -2,11 +2,21 @@
   0% {
     transform: scale(1);
   }
-
   50% {
     transform: scale(1.25);
   }
+  100% {
+    transform: scale(1);
+  }
+}
 
+@keyframes reverse-heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.8); /* Reverse scale */
+  }
   100% {
     transform: scale(1);
   }
@@ -18,23 +28,27 @@
   width: 70px;
   height: 70px;
 }
-.empty-heart#added {
+
+.added {
   animation: heartbeat 1s;
-  fill: red;
   color: red;
   opacity: 1;
   transition: opacity 500ms;
+  width: 70px;
+  height: 70px;
 }
+
 .full-heart {
-  color: red;
   color: red;
   width: 70px;
   height: 70px;
 }
-.full-heart#removed {
-  animation: heartbeat 1s;
+
+.removed {
+  animation: reverse-heartbeat 1s; /* Use reverse animation */
   color: black;
   opacity: 0.3;
   transition: opacity 500ms;
+  width: 70px;
+  height: 70px;
 }
-

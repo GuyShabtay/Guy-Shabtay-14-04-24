@@ -11,6 +11,8 @@
 }
 #day-card.dark-mode{
   background-color: #333;
+  color:white
+
 }
 #day-weather-icon{
   width:100%;

@@ -65,21 +65,28 @@
 #add-to-favorites{
   border-radius: 5px;
 transition: all 0.3s ease-in;
-padding: 10px 12px;
-mix-blend-mode:darken ;
+/* padding: 10px 12px; */
+width: 170px;
+height: 30px;
+margin-left: 10px;
+border: none;
 }
 #add-to-favorites:hover{
 scale:1.05;
 background-color: gray;
 box-shadow: 6px 4px 4px rgba(0, 0, 0, 0.3);
 cursor:pointer;
-
 }
 #add-to-favorites:active{
 scale:0.95;
 }
-#add-to-favorites.dark-mode{
+#add-to-favorites.dark-mode,#add-to-favorites:hover{
   background-color: #333;
+  color: white;
+}
+#add-to-favorites.dark-mode:hover{
+  background-color: white;
+  color: #333;
 }
 #current-weather h1{
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

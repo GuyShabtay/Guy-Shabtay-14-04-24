@@ -13,12 +13,14 @@
 }
 #favorite-card.dark-mode{
   background-color: #333;
+  color:white
 }
 #favorite-card:hover{
   box-shadow: none;
   transform: translateY(10px);
   scale: 0.9;
   cursor: pointer;
+  
 }
 #favorite-weather-icon{
   width:100%;

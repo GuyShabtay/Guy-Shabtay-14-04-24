@@ -4,17 +4,20 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 // import { useSelector } from 'react-redux';
 
 
-const HeartBtn = ({addOrRemoveFavorite,isFavorite}) => {
-  // const favoritesList = useSelector((state) => state.favoritesList);
+const HeartBtn = ({heartStyle,isFavorite}) => {
+  const handleAddToFavorites = async () => {
+    const element = document.querySelector('.heart');
+      element.classList.remove();
+      element.classList.add({heartStyle});
 
-  // const handleAddToFavorites2 =  () => {
-  //   if(addToFavoritesResult==='added')
-   
-  // };
+    // switch(heartFill){
+    //   case 'initial': return 'empty-heart';
+    //   case 'added': return 'empty-heart';
+
+    }
   return (
     <div >
-    <FavoriteIcon className={(isFavorite ? 'full-heart': 'empty-heart') } id={(addOrRemoveFavorite==='add' ? 'added': 'removed') } />
-
+    <FavoriteIcon key={heartStyle} className={heartStyle} />
     </div>
   )
 }

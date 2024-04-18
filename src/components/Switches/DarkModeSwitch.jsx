@@ -4,7 +4,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import LightModeIcon from '@mui/icons-material/LightMode';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { invert } from '../../redux/Theme';
 
 
@@ -64,6 +64,8 @@ const IOSSwitch = styled((props) => (
 
 const DarkModeSwitch = () => {
   const dispatch = useDispatch();
+  const isDarkMode = useSelector((state) => state.theme.isDarkMode);
+
 
    const handleSwitchChange = () => {
     dispatch(invert())
@@ -73,7 +75,7 @@ const DarkModeSwitch = () => {
       <FormControlLabel
         control={<IOSSwitch sx={{ m: 1 }} onChange={handleSwitchChange} />}
         labelPlacement="start"
-        label=<LightModeIcon/>
+        label=<LightModeIcon sx={{ color: isDarkMode ? '#333':'white'  }} />
         
       />
     </FormGroup>

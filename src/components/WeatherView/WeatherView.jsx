@@ -19,8 +19,9 @@ const WeatherView = () => {
   const [nextFiveDaysConditions, setNextFiveDaysConditions] = useState([]);
   const [temperatureScale, setTemperatureScale] = useState('°C');
   const [addOrRemoveFavorite, setAddOrRemoveFavorite] = useState('');
-  const [isAddToFavorites, setIsAddToFavorites] = useState('');
-  const [isFavorite, setIsFavorite] = useState('');
+  const [isAddFavoritePressed, setIsAddFavoritePressed] = useState('initial');
+  const [isFavorite, setIsFavorite] = useState(true);
+  const [heartStyle, setHeartStyle] = useState('empty-heart');
   const favoritesList = useSelector((state) => state.favoritesList);
   const isFahrenheit = useSelector(
     (state) => state.temperatureScale.isFahrenheit
@@ -30,15 +31,39 @@ const WeatherView = () => {
   const dispatch = useDispatch();
 
 
-  useEffect((cityCode) => {
-    if (favoritesList.map(item => item.ID).includes(cityCode)) {
-      setAddOrRemoveFavorite('remove');
-    } else {
-      setAddOrRemoveFavorite('add');
-    }
-    
-    
-    console.log(addOrRemoveFavorite)
+  useEffect(() => {
+    const getCityCodeBtCityName = async () => {
+      try {
+        const cityCode = await getCity(city); // Replace 'YourCityName' with the city you want to search for
+        setCityCode(cityCode);
+        getCurrentWeatherConditionsByCityCode(cityCode);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    const getCurrentWeatherConditionsByCityCode = async (cityCode) => {
+      try {
+        console.log('cityCode',cityCode)
+        const currentWeatherDetails = await getCurrentConditions(cityCode); // Replace 'YourCityName' with the city you want to search for
+        setCurrentWeatherConditions(currentWeatherDetails);
+       
+        getNextFiveDaysConditionsByCityCode(cityCode);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+    const getNextFiveDaysConditionsByCityCode = async (cityCode) => {
+      try {
+        const nextFiveDaysDetails = await getNextFiveDaysConditions(cityCode); // Replace 'YourCityName' with the city you want to search for
+        setNextFiveDaysConditions(nextFiveDaysDetails);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+    getCityCodeBtCityName(city)
+
+
   }, [favoritesList, city]);
 
   const checkIsFavorite =  (cityCode) => {
@@ -57,49 +82,79 @@ const WeatherView = () => {
 
   // };
   const handleAddToFavorites = async () => {
-    try {
-      const cityCode = await getCity(city); // Replace 'YourCityName' with the city you want to search for
-      // console.log('Print the result',cityCode); // Print the result
-      setCityCode(cityCode);
-      checkIsFavorite(cityCode);
-    //   if (isFavorite)
-    //   setAddOrRemoveFavorite('add')
-    // else
-    //   setAddOrRemoveFavorite('remove')
-    console.log('addOrRemoveFavorite',addOrRemoveFavorite)
-      handleAddToFavorites1(cityCode);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-  const handleAddToFavorites1 = async (cityCode) => {
-    try {
-      const currentWeatherDetails = await getCurrentConditions(cityCode); // Replace 'YourCityName' with the city you want to search for
-      setCurrentWeatherConditions(currentWeatherDetails);
-      console.log('isAddToFavorites',isAddToFavorites)
-      if(isAddToFavorites)
-      dispatch(addToFavorites({ ID: cityCode,name:city, currentWeather:currentWeatherDetails.weatherText }));
+    const existingItemIndex = favoritesList?.findIndex(item => item.ID === '328328');
+console.log(favoritesList)
+      if(existingItemIndex === -1 )
+      {
+      dispatch(addToFavorites({ ID: cityCode,name:city, currentWeather:currentWeatherConditions.weatherText }));
+      setHeartStyle('added')
+      setIsFavorite(false);
+      setIsAddFavoritePressed('added');
+      }
     else
-      dispatch(removeFromFavorites({ ID: cityCode}));
+    {
+      dispatch(removeFromFavorites(cityCode));
+      setHeartStyle('removed')
+      setIsFavorite(true)
+      setIsAddFavoritePressed('removed')
+    }
+  };
 
-      // setAddOrRemoveFavorite(true);
-      console.log('favoritesList',favoritesList[0])
-      // console.log('setAddOrRemoveFavorite',addOrRemoveFavorite)
-      // console.log('setIsFavorite',isFavorite)
-      handleAddToFavorites2(cityCode);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-  const handleAddToFavorites2 = async (cityCode) => {
-    try {
-      const nextFiveDaysDetails = await getNextFiveDaysConditions(cityCode); // Replace 'YourCityName' with the city you want to search for
-      setNextFiveDaysConditions(nextFiveDaysDetails);
-      console.log(nextFiveDaysDetails);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
+//   const handleAddToFavorites0 = async () => {
+//     try {
+//       const cityCode = await getCity(city); // Replace 'YourCityName' with the city you want to search for
+//       // console.log('Print the result',cityCode); // Print the result
+//       setCityCode(cityCode);
+//       checkIsFavorite(cityCode);
+//     //   if (isFavorite)
+//     //   setAddOrRemoveFavorite('add')
+//     // else
+//     //   setAddOrRemoveFavorite('remove')
+//     console.log('addOrRemoveFavorite',addOrRemoveFavorite)
+//       handleAddToFavorites1(cityCode);
+//     } catch (error) {
+//       console.error('Error:', error);
+//     }
+//   };
+//   const handleAddToFavorites1 = async (cityCode) => {
+//     try {
+//       const currentWeatherDetails = await getCurrentConditions(cityCode); // Replace 'YourCityName' with the city you want to search for
+//       setCurrentWeatherConditions(currentWeatherDetails);
+//       console.log('isAddToFavorites',isAddToFavorites)
+//       const existingItemIndex = favoritesList?.findIndex(item => item.ID === '328328');
+// console.log(favoritesList)
+//       if(existingItemIndex === -1 )
+//       {
+//       dispatch(addToFavorites({ ID: cityCode,name:city, currentWeather:currentWeatherDetails.weatherText }));
+//       setIsFavorite(true)
+//       setIsAddToFavorites(true)
+//       }
+//     else
+//     {
+//       dispatch(removeFromFavorites(cityCode));
+//       setIsFavorite(false)
+//       setIsAddToFavorites(false)
+//     }
+
+
+//       // setAddOrRemoveFavorite(true);
+//       console.log('favoritesList',favoritesList[0])
+//       // console.log('setAddOrRemoveFavorite',addOrRemoveFavorite)
+//       // console.log('setIsFavorite',isFavorite)
+//       handleAddToFavorites2(cityCode);
+//     } catch (error) {
+//       console.error('Error:', error);
+//     }
+//   };
+//   const handleAddToFavorites2 = async (cityCode) => {
+//     try {
+//       const nextFiveDaysDetails = await getNextFiveDaysConditions(cityCode); // Replace 'YourCityName' with the city you want to search for
+//       setNextFiveDaysConditions(nextFiveDaysDetails);
+//       console.log(nextFiveDaysDetails);
+//     } catch (error) {
+//       console.error('Error:', error);
+//     }
+//   };
 
   return (
     <div id='weather-view'>
@@ -128,9 +183,9 @@ const WeatherView = () => {
           Discover your forecast, seize the day
         </h1>
         <div id='weather-view-top-right'>
-          <HeartBtn addOrRemoveFavorite={addOrRemoveFavorite} isFavorite={isFavorite}/>
+          <HeartBtn heartStyle={heartStyle}/>
           <button id='add-to-favorites' className={isDarkMode ? 'dark-mode' :''} onClick={handleAddToFavorites} >
-            {isAddToFavorites ? 'Add to Favorites': 'Remove From Favorites'}
+            {isFavorite ? 'Add to Favorites': 'Remove From Favorites'}
           </button>
         </div>
       </div>

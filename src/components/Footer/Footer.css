@@ -15,13 +15,24 @@ width: 130px;
 #social-links{
   position: absolute;
   right: 10px;
-
 }
 a .social-link{
-  color: black;
+  color: white;
   width: 40px;
   height: 40px;
+
 }
+a .social-link.dark-mode{
+  color:#333
+}
+a .social-link.dark-mode:hover{
+  color:white;
+}
+a .social-link:hover{
+  color:#333;
+
+
+  }
  .buttons-container{
 display: flex;
     align-items: center;
