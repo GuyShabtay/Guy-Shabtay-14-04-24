@@ -1,7 +1,10 @@
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 const apiKey = import.meta.env.VITE_API_KEY;
+const cityKey = useSelector((state) => state.weatherConditions.currentDay.cityKey);
 
-export const getCity = async (cityName) => {
+export const getCityName = async (cityName) => {
+
   console.log(cityName)
   const base = 'http://dataservice.accuweather.com/locations/v1/cities/search';
   const query = `?apikey=${apiKey}&q=${cityName}`;
@@ -12,32 +15,34 @@ export const getCity = async (cityName) => {
 
     return response.data[0].Key;
   } catch (error) {
-    console.error('Error fetching city:', error);
+    console.error('Error fetching city name:', error);
     throw error; // Rethrow the error to be caught by the caller
   }
 };
 
-export const getCurrentConditions = async (cityCode) => {
+export const getCurrentConditions = async (cityKey,cityName) => {
   const base = 'http://dataservice.accuweather.com/currentconditions/v1/';
-  const query = `${cityCode}?apikey=${apiKey}`;
+  const query = `${cityKey}?apikey=${apiKey}`;
   try {
-    const currentDetails = await axios.get(base + query);
+    const currentDetails = await axios.get(base + query).data[0];
     let currentConditions = {};
-    currentConditions.weatherText = currentDetails.data[0].WeatherText;
-    currentConditions.weatherIcon = currentDetails.data[0].WeatherIcon;
-    currentConditions.temperatureC = Math.floor(currentDetails.data[0].Temperature.Metric.Value);
-    currentConditions.temperatureF = Math.floor(currentDetails.data[0].Temperature.Imperial.Value);
+    currentConditions.cityName=cityKey,
+    currentConditions.cityKey=cityName,
+    currentConditions.weather.weatherText = currentDetails.WeatherText;
+    currentConditions.weather.weatherIcon = currentDetails.WeatherIcon;
+    currentConditions.weather.temperatureC = Math.floor(currentDetails.Temperature.Metric.Value);
+    currentConditions.weather.temperatureF = Math.floor(currentDetails.Temperature.Imperial.Value);
     console.log(currentConditions)
     return currentConditions;
   } catch (error) {
-    console.error('Error fetching city:', error);
+    console.error('Error fetching city conditions:', error);
     throw error;
   }
 };
 
-export const getNextFiveDaysConditions = async (cityCode) => {
+export const getNextFiveDaysConditions = async (cityKey) => {
   const base = 'http://dataservice.accuweather.com/forecasts/v1/daily/5day/';
-  const query = `${cityCode}?apikey=${apiKey}`;
+  const query = `${cityKey}?apikey=${apiKey}`;
   try {
     const response = await axios.get(base + query);
     let nextFiveDaysConditions = [];
@@ -59,7 +64,7 @@ export const getNextFiveDaysConditions = async (cityCode) => {
     });
     return nextFiveDaysConditions;
   } catch (error) {
-    console.error('Error fetching city:', error);
+    console.error('Error fetching next five days conditions:', error);
     throw error;
   }
 };
@@ -76,7 +81,7 @@ export const getAutoComplete = async (searchInput) => {
   const citiesNamesWithoutDuplicates = [...new Set(autoComplitionsCitiesNames)];
     return citiesNamesWithoutDuplicates;
   } catch (error) {
-    console.error('Error fetching city:', error);
+    console.error('Error fetching auto complete:', error);
     throw error;
   }
 };

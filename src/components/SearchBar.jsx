@@ -22,11 +22,17 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Stack from '@mui/material/Stack';
 import { getAutoComplete } from '../ApiCalls';
 import SearchIcon from '@mui/icons-material/Search';
+import { useDispatch } from 'react-redux';
+import {setSearchQuery} from '../redux/Search'
+
+
 
 
 const SearchBar = () => {
   const [inputValue, setInputValue] = useState('');
   const [autoCompletions, setAutoCompletions] = useState([]);
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     if (inputValue.length) handleAutoComplete();
@@ -47,6 +53,8 @@ const SearchBar = () => {
 
   const handleSelectionChange = (event, value) => {
     console.log('Selected:', value); // Print selected item to console
+    dispatch(setSearchQuery(value))
+
   };
 
   return (

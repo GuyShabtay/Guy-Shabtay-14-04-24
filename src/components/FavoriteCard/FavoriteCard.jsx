@@ -11,16 +11,20 @@ const FavoriteCard = ({favorite}) => {
   return (
     <div id='favorite-card' className={isDarkMode ? 'dark-mode' :''}>
     <div id='favorite-city'>{favorite.city}</div>
+    <div>{favorite.name}</div>
+    <div>
+    {favorite.currentWeather.weatherText}
+    </div>
     {isFahrenheit ? (
       <div id='degrees'>
-      {favorite.temperatureF} °F
+      {favorite.currentWeather.temperatureF} °F
       </div>
     ) : (
       <div id='degrees'>
-      {favorite.temperatureC} °C
+      {favorite.currentWeather.temperatureC} °C
       </div>
     )}
-      <img id='favorite-weather-icon' src={`/weather icons/${favorite.dayIcon}.png`} alt="favorite weather icon" />
+      <img id='favorite-weather-icon' src={`/weather icons/${favorite.currentWeather.weatherIcon}.png`} alt="favorite weather icon" />
       {console.log(isDarkMode)}
     </div>
   )

@@ -3,19 +3,19 @@ import './WeatherView.css';
 import HeartBtn from '../HeartBtn/HeartBtn';
 import DayCard from '../DayCard/DayCard';
 import {
-  getCity,
+  getCityName,
   getCurrentConditions,
   getNextFiveDaysConditions,
 } from '../../ApiCalls';
 import { useSelector,useDispatch } from 'react-redux';
 import { addToFavorites, removeFromFavorites } from '../../redux/FavoritesList';
-
+import {setCurrentDay,setNextFiveDays} from '../../redux/WeatherConditions'
 
 const WeatherView = () => {
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
   const [currentWeatherConditions, setCurrentWeatherConditions] = useState({});
-  const [city, setCity] = useState('london');
-  const [cityCode, setCityCode] = useState('');
+  const [cityName, setCityName] = useState('london');
+  const [cityKey, setCityKey] = useState('');
   const [nextFiveDaysConditions, setNextFiveDaysConditions] = useState([]);
   const [temperatureScale, setTemperatureScale] = useState('°C');
   const [addOrRemoveFavorite, setAddOrRemoveFavorite] = useState('');
@@ -27,54 +27,67 @@ const WeatherView = () => {
     (state) => state.temperatureScale.isFahrenheit
   );
   const isDarkMode = useSelector((state) => state.theme.isDarkMode);
+  const currentDay = useSelector((state) => state.weatherConditions.currentDay);
+  const searchQuery = useSelector((state) => state.search.searchQuery);
+  const nextFiveDays = useSelector((state) => state.weatherConditions.nextFiveDays);
+
 
   const dispatch = useDispatch();
 
 
   useEffect(() => {
-    const getCityCodeBtCityName = async () => {
+    const getCityKeyByCityName = async () => {
       try {
-        const cityCode = await getCity(city); // Replace 'YourCityName' with the city you want to search for
-        setCityCode(cityCode);
-        getCurrentWeatherConditionsByCityCode(cityCode);
+        if(searchQuery && searchQuery.length>0)
+        {
+        const cityKey = await getCityName(searchQuery); // Replace 'YourCityName' with the city you want to search for
+        // setCityKey(cityKey);
+        getCurrentWeatherConditionsByCityKey();
+        }
       } catch (error) {
         console.error('Error:', error);
       }
     };
 
-    const getCurrentWeatherConditionsByCityCode = async (cityCode) => {
+    const getCurrentWeatherConditionsByCityKey = async () => {
       try {
-        console.log('cityCode',cityCode)
-        const currentWeatherDetails = await getCurrentConditions(cityCode); // Replace 'YourCityName' with the city you want to search for
-        setCurrentWeatherConditions(currentWeatherDetails);
-       
-        getNextFiveDaysConditionsByCityCode(cityCode);
+        console.log('cityKey',cityKey)
+        const currentWeatherDetails = await getCurrentConditions(cityKey,cityName); // Replace 'YourCityName' with the city you want to search for
+        // setCurrentWeatherConditions(currentWeatherDetails);
+        // setCurrentWeatherConditions(currentWeatherDetails);
+        dispatch(setCurrentDay(currentWeatherDetails));
+        console.log(currentWeatherDetails)
+        console.log(currentDay)
+        
+        getNextFiveDaysConditionsByCityKey(cityKey);
       } catch (error) {
         console.error('Error:', error);
       }
     };
-    const getNextFiveDaysConditionsByCityCode = async (cityCode) => {
+    const getNextFiveDaysConditionsByCityKey = async (cityKey) => {
       try {
-        const nextFiveDaysDetails = await getNextFiveDaysConditions(cityCode); // Replace 'YourCityName' with the city you want to search for
-        setNextFiveDaysConditions(nextFiveDaysDetails);
+        const nextFiveDaysDetails = await getNextFiveDaysConditions(cityKey); // Replace 'YourCityName' with the city you want to search for
+        // setNextFiveDaysConditions(nextFiveDaysDetails);
+        dispatch(setNextFiveDays(nextFiveDaysDetails));
+        // console.log(nextFive)
       } catch (error) {
         console.error('Error:', error);
       }
     };
-    getCityCodeBtCityName(city)
+    getCityKeyByCityName(cityName)
 
 
-  }, [favoritesList, city]);
+  }, [favoritesList, searchQuery]);
 
-  const checkIsFavorite =  (cityCode) => {
+  const checkIsFavorite =  (cityKey) => {
     
-    // setIsFavorite(favoritesList.some(item => item.ID === cityCode));
+    // setIsFavorite(favoritesList.some(item => item.ID === cityKey));
     // console.log('checkIsFavorite',isFavorite)
 
   };
   // useEffect(() => {
-  //   // setIsFavorite(favoritesList.some(item => item.ID === cityCode));
-  //   // setIsFavorite(favoritesList.findIndex(item => item.ID === cityCode));
+  //   // setIsFavorite(favoritesList.some(item => item.ID === cityKey));
+  //   // setIsFavorite(favoritesList.findIndex(item => item.ID === cityKey));
   // }, [favoritesList]); 
 
   // const isFavorite = (favoritesList) => {
@@ -82,18 +95,24 @@ const WeatherView = () => {
 
   // };
   const handleAddToFavorites = async () => {
-    const existingItemIndex = favoritesList?.findIndex(item => item.ID === '328328');
+    const existingItemIndex = favoritesList?.findIndex(item => item.ID === currentDay.cityKey);
 console.log(favoritesList)
       if(existingItemIndex === -1 )
       {
-      dispatch(addToFavorites({ ID: cityCode,name:city, currentWeather:currentWeatherConditions.weatherText }));
+        const currentWeather={
+          weatherText:currentDay.weatherText,
+          temperatureC:currentDay.temperatureC,
+          temperatureF:currentDay.temperatureF,
+          weatherIcon: currentDay.weatherIcon
+        }
+      dispatch(addToFavorites({ ID: cityKey,name:cityName, currentWeather:currentWeather }));
       setHeartStyle('added')
       setIsFavorite(false);
       setIsAddFavoritePressed('added');
       }
     else
     {
-      dispatch(removeFromFavorites(cityCode));
+      dispatch(removeFromFavorites(cityKey));
       setHeartStyle('removed')
       setIsFavorite(true)
       setIsAddFavoritePressed('removed')
@@ -102,36 +121,36 @@ console.log(favoritesList)
 
 //   const handleAddToFavorites0 = async () => {
 //     try {
-//       const cityCode = await getCity(city); // Replace 'YourCityName' with the city you want to search for
-//       // console.log('Print the result',cityCode); // Print the result
-//       setCityCode(cityCode);
-//       checkIsFavorite(cityCode);
+//       const cityKey = await getCity(city); // Replace 'YourCityName' with the city you want to search for
+//       // console.log('Print the result',cityKey); // Print the result
+//       setCityKey(cityKey);
+//       checkIsFavorite(cityKey);
 //     //   if (isFavorite)
 //     //   setAddOrRemoveFavorite('add')
 //     // else
 //     //   setAddOrRemoveFavorite('remove')
 //     console.log('addOrRemoveFavorite',addOrRemoveFavorite)
-//       handleAddToFavorites1(cityCode);
+//       handleAddToFavorites1(cityKey);
 //     } catch (error) {
 //       console.error('Error:', error);
 //     }
 //   };
-//   const handleAddToFavorites1 = async (cityCode) => {
+//   const handleAddToFavorites1 = async (cityKey) => {
 //     try {
-//       const currentWeatherDetails = await getCurrentConditions(cityCode); // Replace 'YourCityName' with the city you want to search for
+//       const currentWeatherDetails = await getCurrentConditions(cityKey); // Replace 'YourCityName' with the city you want to search for
 //       setCurrentWeatherConditions(currentWeatherDetails);
 //       console.log('isAddToFavorites',isAddToFavorites)
 //       const existingItemIndex = favoritesList?.findIndex(item => item.ID === '328328');
 // console.log(favoritesList)
 //       if(existingItemIndex === -1 )
 //       {
-//       dispatch(addToFavorites({ ID: cityCode,name:city, currentWeather:currentWeatherDetails.weatherText }));
+//       dispatch(addToFavorites({ ID: cityKey,name:city, currentWeather:currentWeatherDetails.weatherText }));
 //       setIsFavorite(true)
 //       setIsAddToFavorites(true)
 //       }
 //     else
 //     {
-//       dispatch(removeFromFavorites(cityCode));
+//       dispatch(removeFromFavorites(cityKey));
 //       setIsFavorite(false)
 //       setIsAddToFavorites(false)
 //     }
@@ -141,14 +160,14 @@ console.log(favoritesList)
 //       console.log('favoritesList',favoritesList[0])
 //       // console.log('setAddOrRemoveFavorite',addOrRemoveFavorite)
 //       // console.log('setIsFavorite',isFavorite)
-//       handleAddToFavorites2(cityCode);
+//       handleAddToFavorites2(cityKey);
 //     } catch (error) {
 //       console.error('Error:', error);
 //     }
 //   };
-//   const handleAddToFavorites2 = async (cityCode) => {
+//   const handleAddToFavorites2 = async (cityKey) => {
 //     try {
-//       const nextFiveDaysDetails = await getNextFiveDaysConditions(cityCode); // Replace 'YourCityName' with the city you want to search for
+//       const nextFiveDaysDetails = await getNextFiveDaysConditions(cityKey); // Replace 'YourCityName' with the city you want to search for
 //       setNextFiveDaysConditions(nextFiveDaysDetails);
 //       console.log(nextFiveDaysDetails);
 //     } catch (error) {
@@ -162,19 +181,19 @@ console.log(favoritesList)
         <div id='weather-view-top-left'>
           <img
             id='current-weather-icon'
-            src={`/weather icons/${currentWeatherConditions.weatherIcon}.png`}
+            src={`/weather icons/${currentDay.weatherIcon}.png`}
             alt='current weather icon'
           />
           <div id='location-details'>
-            <div id='city'>{city}</div>
+            <div id='city-name'>{Name}</div>
            
               {isFahrenheit ? (
                 <div id='current-temperature'>
-                {currentWeatherConditions.temperatureF} °F
+                {currentDay.temperatureF} °F
                 </div>
               ) : (
                 <div id='current-temperature'>
-                {currentWeatherConditions.temperatureC} °C
+                {currentDay.temperatureC} °C
                 </div>
               )}
           </div>
@@ -190,10 +209,10 @@ console.log(favoritesList)
         </div>
       </div>
       <div id='current-weather'>
-        <h1>{currentWeatherConditions.weatherText}</h1>
+        <h1>{currentDay.weatherText}</h1>
       </div>
       <div id='weather-view-bottom'>
-        {nextFiveDaysConditions.map((day, index) => (
+        {nextFiveDays.map((day, index) => (
           <div className='day' key={index}>
             <DayCard dayName={days[index]} day={day} />
           </div>
