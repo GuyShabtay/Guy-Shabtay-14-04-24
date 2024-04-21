@@ -37,7 +37,7 @@ const DayCard = ({ day }) => {
       )}
       <img
         id='day-weather-icon'
-        src={`/weather icons/${day.dayIcon}.png`}
+        src={`/weather icons/${day?.dayIcon}.png`}
         alt='day weather icon'
       />
     </div>

@@ -83,6 +83,8 @@
   padding: 10px 20px;
   border-radius: 5px;
   transition: transform 0.3s ease-in-out;
+  text-align: center;
+
 }
 
 .backdrop {
