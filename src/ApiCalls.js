@@ -2,7 +2,7 @@ import axios from 'axios';
 const apiKey = import.meta.env.VITE_API_KEY;
 
 export const getCityName = async (cityName) => {
-  const base = 'http://dataservice.accuweather.com/locations/v1/cities/search';
+  const base = 'https://dataservice.accuweather.com/locations/v1/cities/search';
   const query = `?apikey=${apiKey}&q=${cityName}`;
   try {
     const response = await axios.get(base + query);
@@ -14,7 +14,7 @@ export const getCityName = async (cityName) => {
 };
 
 export const getCurrentConditions = async (cityKey, cityName) => {
-  const base = 'http://dataservice.accuweather.com/currentconditions/v1/';
+  const base = 'https://dataservice.accuweather.com/currentconditions/v1/';
   const query = `${cityKey}?apikey=${apiKey}`;
   try {
     const currentDetails = (await axios.get(base + query)).data[0];
@@ -36,7 +36,7 @@ export const getCurrentConditions = async (cityKey, cityName) => {
 };
 
 export const getNextFiveDaysConditions = async (cityKey) => {
-  const base = 'http://dataservice.accuweather.com/forecasts/v1/daily/5day/';
+  const base = 'https://dataservice.accuweather.com/forecasts/v1/daily/5day/';
   const query = `${cityKey}?apikey=${apiKey}`;
   try {
     const response = await axios.get(base + query);
@@ -67,7 +67,7 @@ export const getNextFiveDaysConditions = async (cityKey) => {
 
 export const getAutoComplete = async (searchInput) => {
   const base =
-    'http://dataservice.accuweather.com/locations/v1/cities/autocomplete';
+    'https://dataservice.accuweather.com/locations/v1/cities/autocomplete';
   const query = `?apikey=${apiKey}&q=${searchInput}`;
   try {
     const autoComplitions = await axios.get(base + query + '1');
@@ -113,7 +113,7 @@ navigator.geolocation.getCurrentPosition(success, error, options);
 export const getCityKeyAndNameByGeoLocation = async () => {
   const currentCoordinates = `${coordinates.latitude},${coordinates.longitude}`;
   const base =
-    'http://dataservice.accuweather.com/locations/v1/cities/geoposition/search';
+    'https://dataservice.accuweather.com/locations/v1/cities/geoposition/search';
   const query = `?apikey=${apiKey}&q=${currentCoordinates}`;
   try {
     const currentCityDetails = await axios.get(base + query);
