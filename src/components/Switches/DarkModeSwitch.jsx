@@ -4,14 +4,11 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import LightModeIcon from '@mui/icons-material/LightMode';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { invert } from '../../redux/Theme';
 
-
-
-
 const IOSSwitch = styled((props) => (
-  <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+  <Switch focusVisibleClassName='.Mui-focusVisible' disableRipple {...props} />
 ))(({ theme }) => ({
   width: 42,
   height: 26,
@@ -61,24 +58,21 @@ const IOSSwitch = styled((props) => (
   },
 }));
 
-
 const DarkModeSwitch = () => {
   const dispatch = useDispatch();
   const isDarkMode = useSelector((state) => state.theme.isDarkMode);
 
-
-   const handleSwitchChange = () => {
-    dispatch(invert())
+  const handleSwitchChange = () => {
+    dispatch(invert());
   };
   return (
     <FormGroup>
       <FormControlLabel
         control={<IOSSwitch sx={{ m: 1 }} onChange={handleSwitchChange} />}
-        labelPlacement="start"
-        label=<LightModeIcon sx={{ color: isDarkMode ? '#333':'white'  }} />
-        
+        labelPlacement='start'
+        label=<LightModeIcon sx={{ color: isDarkMode ? '#333' : 'white' }} />
       />
     </FormGroup>
   );
-}
+};
 export default DarkModeSwitch;

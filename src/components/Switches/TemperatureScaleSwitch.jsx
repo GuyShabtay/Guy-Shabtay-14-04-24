@@ -3,13 +3,11 @@ import { styled } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { invert } from '../../redux/TemperatureScale';
 
-
-
 const IOSSwitch1 = styled((props) => (
-  <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+  <Switch focusVisibleClassName='.Mui-focusVisible' disableRipple {...props} />
 ))(({ theme }) => ({
   width: 42,
   height: 26,
@@ -59,22 +57,23 @@ const IOSSwitch1 = styled((props) => (
   },
 }));
 
-
 const TemperatureScaleSwitch = () => {
   const dispatch = useDispatch();
-  const isFahrenheit = useSelector((state) => state.temperatureScale.isFahrenheit)
-   const handleSwitchChange = () => {
-    dispatch(invert())
+  const isFahrenheit = useSelector(
+    (state) => state.temperatureScale.isFahrenheit
+  );
+  const handleSwitchChange = () => {
+    dispatch(invert());
   };
 
   return (
     <FormGroup>
       <FormControlLabel
         control={<IOSSwitch1 sx={{ m: 1 }} onChange={handleSwitchChange} />}
-        labelPlacement="start"
-        label={isFahrenheit ? "°F": "°C"}
+        labelPlacement='start'
+        label={isFahrenheit ? '°F' : '°C'}
       />
     </FormGroup>
   );
-}
+};
 export default TemperatureScaleSwitch;
