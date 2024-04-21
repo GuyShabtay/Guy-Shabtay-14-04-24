@@ -19,7 +19,7 @@ const FavoriteCard = ({ favorite }) => {
       )}
       <img
         id='favorite-weather-icon'
-        src={`/weather icons/${favorite.currentWeather.weatherIcon}.png`}
+        src={`/weather icons/${favorite?.currentWeather?.weatherIcon}.png`}
         alt='favorite weather icon'
       />
     </div>

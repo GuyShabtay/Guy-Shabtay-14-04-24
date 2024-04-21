@@ -70,7 +70,7 @@ export const getAutoComplete = async (searchInput) => {
     'https://dataservice.accuweather.com/locations/v1/cities/autocomplete';
   const query = `?apikey=${apiKey}&q=${searchInput}`;
   try {
-    const autoComplitions = await axios.get(base + query + '1');
+    const autoComplitions = await axios.get(base + query);
     const maxFiveAutoComplitions = autoComplitions.data.slice(0, 5);
     const autoComplitionsCitiesNames = maxFiveAutoComplitions.map(
       (item, index) => {
