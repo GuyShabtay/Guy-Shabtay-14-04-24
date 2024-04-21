@@ -5,7 +5,6 @@
   flex-direction: column;
   width: 70%;
   height: 500px;
-  border: solid 3px rgb(96, 194, 229);
   padding: 10px 10px 20px 10px;
   backdrop-filter: blur(10px);
 }
@@ -15,7 +14,6 @@
   justify-content: space-between;
   width: 100%;
   height: 70px;
-  border: 3px blue solid;
 }
 .handlee-regular {
   font-family: 'Handlee', cursive;
@@ -123,6 +121,5 @@
     width: 70%;
     height: fit-content;
     margin: 10px 0;
-    border: green 3px solid;
   }
 }
