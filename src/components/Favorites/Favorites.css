@@ -22,9 +22,17 @@
   flex-wrap: wrap;
   /* border: solid 2px rgb(96, 229, 114); */
   width: 90%;
-  justify-content: space-between;
+  justify-content: center;
 }
 #favorite-cards .favorite{
   width: 15%;
   /* height: 250px; */
+}
+.favorite-btn{
+  appearance: none;
+  border: none;
+  background-color: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
 }

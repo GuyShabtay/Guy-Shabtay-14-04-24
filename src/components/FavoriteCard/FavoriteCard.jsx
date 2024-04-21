@@ -25,7 +25,6 @@ const FavoriteCard = ({favorite}) => {
       </div>
     )}
       <img id='favorite-weather-icon' src={`/weather icons/${favorite.currentWeather.weatherIcon}.png`} alt="favorite weather icon" />
-      {console.log(isDarkMode)}
     </div>
   )
 }

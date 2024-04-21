@@ -10,7 +10,7 @@ export const WeatherConditionsSlice = createSlice({
   initialState,
   reducers: {
     setCurrentDay: (state, action) => {
-      const { weatherText, weatherIcon, temperatureC,temperatureF } = action.payload;
+      const { cityKey, cityName,weather:{ weatherText, weatherIcon, temperatureC,temperatureF } } = action.payload;
       state.currentDay={cityKey,cityName,weather:{ weatherText, weatherIcon, temperatureC,temperatureF }};
     },
     setNextFiveDays: (state, action) => {

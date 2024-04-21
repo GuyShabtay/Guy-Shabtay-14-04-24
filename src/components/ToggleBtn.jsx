@@ -4,17 +4,22 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import './ToggleBtn.css';
 import { styled } from "@mui/material/styles";
 import MuiToggleButton from "@mui/material/ToggleButton";
-import { useDispatch } from 'react-redux';
-import { invert } from '../redux/VisiblePage';
+import { useDispatch,useSelector} from 'react-redux';
+import { invert,changeAlignment } from '../redux/VisiblePage';
 
 
 
 export default function ToggleBtn() {
-  const [alignment, setAlignment] = React.useState('left');
+  const toggleBtnAlignment = useSelector((state) => state.visiblePage.toggleBtnAlignment);
+
+  // const [alignment, setAlignment] = React.useState('left');
   const dispatch = useDispatch();
 
-  const handleAlignment = (event, newAlignment) => {
-    setAlignment(newAlignment);
+   const handleAlignment = (event, newAlignment) => {
+    // setAlignment(newAlignment);
+    dispatch(changeAlignment(newAlignment))
+
+    // console.log('newAlignment',newAlignment)
     dispatch(invert())
   };
   const ToggleButton = styled(MuiToggleButton)({
@@ -27,7 +32,7 @@ export default function ToggleBtn() {
   });
   return (
     <ToggleButtonGroup
-      value={alignment}
+      value={toggleBtnAlignment}
       exclusive
       onChange={handleAlignment}
       aria-label="text alignment"

@@ -1,28 +1,33 @@
 import React from 'react';
 import './Favorites.css';
 import FavoriteCard from '../FavoriteCard/FavoriteCard';
-import { useSelector } from 'react-redux';
+import { useSelector ,useDispatch} from 'react-redux';
+import { invert,changeAlignment } from '../../redux/VisiblePage';
+import {setSearchQuery} from '../../redux/Search'
+
+
 
 
 const Favorites = () => {
-  const favorites = useSelector((state) => state.favoritesList);
-  console.log('favorites',favorites)
-  // const favorites=[
-  //   {city:'Tel Aviv',weatherText:'sunny',dayIcon:5,temperatureC:22,temperatureF:37},
-  //   {city:'Tel Aviv',weatherText:'sunny',dayIcon:5,temperatureC:22,temperatureF:37},
-  //   {city:'Tel Aviv',weatherText:'sunny',dayIcon:5,temperatureC:22,temperatureF:37},
-  //   {city:'Tel Aviv',weatherText:'sunny',dayIcon:5,temperatureC:22,temperatureF:37},
-  //   {city:'Tel Aviv',weatherText:'sunny',dayIcon:5,temperatureC:22,temperatureF:37}, 
-  //   {city:'Tel Aviv',weatherText:'sunny',dayIcon:5,temperatureC:22,temperatureF:37}, 
-    
-  // ]
+  const favorites = useSelector((state) => state.favoritesList.favorites);
+  const dispatch = useDispatch();
+  // console.log('favorites',favorites)
+  const showFavoriteInMainPage =  (cityName) => {
+    dispatch(invert());
+    dispatch(changeAlignment('left'));
+    dispatch(setSearchQuery(cityName))
+
+    }
   return (
     <div id='favorites'>
     <h1 className='handlee-regular'>Favorites</h1>
     <div id='favorite-cards'>
     {favorites.map((favorite, index) => (
       <div className='favorite' key={index}>
-    <FavoriteCard favorite={favorite}  />
+      <button className='favorite-btn' onClick={() => showFavoriteInMainPage(favorite.name) }>
+      <FavoriteCard favorite={favorite} />
+    </button>
+    
       </div>
     ))}
     </div>

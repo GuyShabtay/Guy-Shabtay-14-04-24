@@ -1,7 +1,6 @@
 import axios from 'axios';
-import { useSelector } from 'react-redux';
 const apiKey = import.meta.env.VITE_API_KEY;
-const cityKey = useSelector((state) => state.weatherConditions.currentDay.cityKey);
+// const cityKey = useSelector((state) => state.weatherConditions.currentDay.cityKey);
 
 export const getCityName = async (cityName) => {
 
@@ -9,9 +8,9 @@ export const getCityName = async (cityName) => {
   const base = 'http://dataservice.accuweather.com/locations/v1/cities/search';
   const query = `?apikey=${apiKey}&q=${cityName}`;
   try {
-    console.log(base + query)
+    // console.log(base + query)
     const response = await axios.get(base + query);
-    console.log(response.data[0].Key)
+    // console.log(response.data[0].Key)
 
     return response.data[0].Key;
   } catch (error) {
@@ -20,25 +19,30 @@ export const getCityName = async (cityName) => {
   }
 };
 
-export const getCurrentConditions = async (cityKey,cityName) => {
+export const getCurrentConditions = async (cityKey, cityName) => {
   const base = 'http://dataservice.accuweather.com/currentconditions/v1/';
   const query = `${cityKey}?apikey=${apiKey}`;
   try {
-    const currentDetails = await axios.get(base + query).data[0];
-    let currentConditions = {};
-    currentConditions.cityName=cityKey,
-    currentConditions.cityKey=cityName,
-    currentConditions.weather.weatherText = currentDetails.WeatherText;
-    currentConditions.weather.weatherIcon = currentDetails.WeatherIcon;
-    currentConditions.weather.temperatureC = Math.floor(currentDetails.Temperature.Metric.Value);
-    currentConditions.weather.temperatureF = Math.floor(currentDetails.Temperature.Imperial.Value);
-    console.log(currentConditions)
+    const currentDetails = (await axios.get(base + query)).data[0];
+    let currentConditions = {
+      cityKey: cityKey, // Assigning cityName to cityKey, assuming it's correct
+      cityName: cityName, // Assigning cityKey to cityName, assuming it's correct
+      // localDate:currentDetails.LocalObservationDateTime,
+      weather: {
+        weatherText: currentDetails.WeatherText,
+        weatherIcon: currentDetails.WeatherIcon,
+        temperatureC: Math.floor(currentDetails.Temperature.Metric.Value),
+        temperatureF: Math.floor(currentDetails.Temperature.Imperial.Value),
+      },
+    };
+    // console.log('currentConditions', currentConditions);
     return currentConditions;
   } catch (error) {
     console.error('Error fetching city conditions:', error);
     throw error;
   }
 };
+
 
 export const getNextFiveDaysConditions = async (cityKey) => {
   const base = 'http://dataservice.accuweather.com/forecasts/v1/daily/5day/';
@@ -55,6 +59,7 @@ export const getNextFiveDaysConditions = async (cityKey) => {
       );
       nextFiveDaysConditions.push({
         dayIcon: item.Day.Icon,
+        localDate:item.Date,
         minTemperatureF: item.Temperature.Minimum.Value,
         maxTemperatureF: item.Temperature.Maximum.Value,
         minTemperatureC: minTemperatureC,
@@ -90,11 +95,68 @@ export const getAutoComplete = async (searchInput) => {
 const fahrenheitToCelsius = (fahrenheitTemperature) => {
   return Math.floor((fahrenheitTemperature - 32) / 1.8);
 };
-// const celsiusTofahrenheit = (celsiusTemperature) => {
-//   return Math.floor((celsiusTemperature * 1.8) + 32);
-// };
 
-// // Usage example
-// getCity('manchester')
-//   .then((data) => console.log(data))
-//   .catch((error) => console.error(error)); // Log the error properly
+let coordinates = {
+  latitude:32.0853,
+  longitude:34.7818
+}; // Variable to store the coordinates
+
+const options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0,
+};
+function success(pos) {
+  coordinates = pos.coords;
+  console.log(coordinates)
+  return coordinates;
+}
+function error(err) {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+}
+// console.log('1a',navigator.geolocation.getCurrentPosition(success, error, options))
+navigator.geolocation.getCurrentPosition(success, error, options);
+
+export const getGeoLocation = async () => {
+  
+  try {
+    console.log('hi')
+   
+    
+    
+  } catch (error) {
+    console.error('Error fetching auto complete:', error);
+    throw error;
+  }
+};
+
+
+
+
+
+
+
+
+export const getCityKeyAndNameByGeoLocation = async () => {
+  // console.log('check')
+
+  console.log('coordinates',coordinates)
+  const currentCoordinates=`${coordinates.latitude},${coordinates.longitude}`
+  // console.log('currentCoordinates',currentCoordinates)
+  const base = 'http://dataservice.accuweather.com/locations/v1/cities/geoposition/search';
+  const query = `?apikey=${apiKey}&q=${currentCoordinates}`;
+  try {
+    const currentCityDetails = await axios.get(base + query);
+    // console.log('currentCityDetails',currentCityDetails)
+    // console.log('currentCityDetails.data',currentCityDetails.data)
+    const cityDetails={
+      cityKey:currentCityDetails.data.Key,
+      cityName:currentCityDetails.data.LocalizedName
+    }
+    // console.log('cityDetails',cityDetails)
+    return cityDetails;
+  } catch (error) {
+    console.error('Error fetching auto complete:', error);
+    throw error;
+  }
+};
