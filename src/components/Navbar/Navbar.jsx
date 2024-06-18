@@ -1,7 +1,7 @@
 import React from 'react';
 import './Navbar.css';
 import ToggleBtn from '../ToggleBtn';
-import logo from '../../assets/heroloLogo.png';
+import logo from '../../assets/skySync.png';
 import DarkModeSwitch from '../Switches/DarkModeSwitch';
 import TemperatureScaleSwitch from '../Switches/TemperatureScaleSwitch';
 
@@ -10,7 +10,7 @@ const Navbar = () => {
     <div id='navbar'>
     <div id='logo'>
     <img src={logo} alt="" id='logo-icon'/>
-    <h2 id='logo-text' className='varela-round-regular'>Herolo Weather Task</h2>
+    <h2 id='logo-text' className='varela-round-regular'>SkySync</h2>
     </div>
     <div id='toggle-and-switches'>
     <div id='switches'>
