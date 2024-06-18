@@ -1,4 +1,4 @@
-# Herolo weather App
+# SkySync weather App
 A weather app  designed to provide users with up-to-date information about current weather conditions, forecasts, and other related data for specific locations. 
 
 ### Run the project
