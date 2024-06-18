@@ -1,7 +1,7 @@
 import React from 'react';
 import './Navbar.css';
 import ToggleBtn from '../ToggleBtn';
-import logo from '../../assets/skySync.png';
+import logo from '../../assets/skySyncLogo.png';
 import DarkModeSwitch from '../Switches/DarkModeSwitch';
 import TemperatureScaleSwitch from '../Switches/TemperatureScaleSwitch';
 
