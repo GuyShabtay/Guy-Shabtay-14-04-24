@@ -1,9 +1,23 @@
-# Orange Umbrella weather App
+# Orange Umbrella
 A weather app  designed to provide users with up-to-date information about current weather conditions, forecasts, and other related data for specific locations. 
+The default location is the user's current location (if he didn't confirm the use of it than it will be Tel Aviv), in addition you can also search for other places by city name, save in favorites and choose degree type: Celsius/Fahrenheit.
 
-### Run the project
-- install dependecies: ```npm i``` 
-- add to the root folder a file called '.env' and in that file add this variable: VITE_API_KEY=DGxDU483Tuah4uIzqJKu1OGflb5H7DQV (you can also use your own API key) 
-- Start the application on localhost:5173 : ```npm run dev ```
+## How to run this project
+- Install dependecies:
+<pre><code>npm i</code></pre>
 
-NOTE:When opening the website, the default location will be the current location of the computer from which the website is running using the GeoLocation API (the location is not necessarily the most accurate)
+- Add to the root folder a file called ```.env``` and in that file add this variable: <pre><code>VITE_API_KEY="your API key"</code></pre> 
+
+- Start the application:
+<pre><code>npm run dev</code></pre>
+
+## Technologies
+- HTML
+- CSS
+- JavaScript
+- React
+- Redux
+- Accuweather API
+- GeoLocation API
+
+NOTE: In order to automatically see your current location weather details, when opening the website, please press "It's ok" when the browser will ask you to get your current location.  
