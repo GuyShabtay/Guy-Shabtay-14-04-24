@@ -17,6 +17,7 @@ The default location is the user's current location (if he didn't confirm the us
 - JavaScript
 - React
 - Redux
+- Axios
 - Accuweather API
 - GeoLocation API
 
